@@ -1,5 +1,6 @@
 //! Layout direction: `El::dir` lays a subtree out right to left (or left to right inside one
-//! that is), as HTML's `dir` attribute does, and `El::mirror_in_rtl` flips a directional icon.
+//! that is), as HTML's `dir` attribute does, and `El::mirror_in_rtl` flips a directional icon or
+//! shape.
 //!
 //! Layout runs left to right; a right-to-left element then mirrors where its children sit inside
 //! it, so a row's first child is at its right, start and end alignment swap, and an absolute
@@ -81,10 +82,11 @@ impl El {
         self
     }
 
-    /// Flips this element's icon left to right when it lays out right to left, for an icon
-    /// that points along the line (a chevron, an arrow, a back button), as `@opencode/ui`'s
-    /// `data-directional` icons do. Icons that don't point keep their drawing. A turned element
-    /// or icon (`El::rotate`, `El::icon_rotation`) turns the other way, as a CSS `scaleX(-1)`
+    /// Flips this element's icon and its own [`El::shape`] left to right when it lays out right
+    /// to left, for a drawing that points along the line (a chevron, an arrow, a back button,
+    /// an SVG-style path), as `@opencode/ui`'s `data-directional` icons do. Icons that don't
+    /// point keep their drawing. A shape mirrors about its box's centre. A turned element or
+    /// icon (`El::rotate`, `El::icon_rotation`) turns the other way, as a CSS `scaleX(-1)`
     /// outside its rotation: a collapsed disclosure's chevron turned to point right points left.
     pub fn mirror_in_rtl(mut self) -> Self {
         self.vis.cold_mut().mirror_rtl = true;

@@ -66,10 +66,12 @@ impl<S: 'static> Runtime<S> {
         if let Some(shape) = &n.vis.shape {
             // When pixel snapping adjusts `r`'s width or height from `r_exact`, keep a point-sized
             // shape centred in `r` so it shares `r`'s centre with fills, borders and icons.
-            let (origin, k) = match shape.view_box {
+            let (mut origin, mut k) = match shape.view_box {
                 Some([vw, vh]) => ([r[0], r[1]], [w / vw, h / vh]),
                 None => ([r[0] + (w - w_exact) * 0.5, r[1] + (h - h_exact) * 0.5], [k_px, k_px]),
             };
+            // Reflect about the box's centre; stroke widths keep their positive scale.
+            if n.flow == crate::el::Flow::Rtl && n.vis.mirror_rtl { (origin[0], k[0]) = (r[0] + r[2] - origin[0], -k[0]); }
             if let Some(t) = self.scene.get(node_id, P_TRIM) {
                 // A presence draw traces the trimmed span on from its start.
                 let end = t.x + (t.y - t.x) * draw;
