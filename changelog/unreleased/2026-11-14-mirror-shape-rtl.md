@@ -1,0 +1,1 @@
+- `El::mirror_in_rtl` now mirrors the element's `El::shape` too, not only its icon atlas and turn: the drawn strokes and fills flip left to right about the element or view-box centre, in the direction Rune resolved for it (so `Direction::Auto` text and a reused memo follow a direction change), while widths, clips, fills, draw progress and an element's outside turn stay as before.
